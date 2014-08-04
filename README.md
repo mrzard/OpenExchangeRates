@@ -3,6 +3,7 @@ OpenExchangeRates Service
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/badges/build.png?b=master)](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/build-status/master)
+[![Build Status](https://travis-ci.org/mrzard/OpenExchangeRates.svg?branch=master)](https://travis-ci.org/mrzard/OpenExchangeRates)
 
 
 This service will help you use OpenExchangeRates in your project
