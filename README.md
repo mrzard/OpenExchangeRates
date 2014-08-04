@@ -1,6 +1,10 @@
 OpenExchangeRates Service
 ==============================
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/?branch=master)
+[![Build Status](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/badges/build.png?b=master)](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/build-status/master)
+
+
 This service will help you use OpenExchangeRates in your project
 
 ## Configuration
