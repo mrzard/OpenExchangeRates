@@ -4,6 +4,7 @@ OpenExchangeRates Service
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/?branch=master)
 [![Build Status](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/badges/build.png?b=master)](https://scrutinizer-ci.com/g/mrzard/OpenExchangeRates/build-status/master)
 [![Build Status](https://travis-ci.org/mrzard/OpenExchangeRates.svg?branch=master)](https://travis-ci.org/mrzard/OpenExchangeRates)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/eac3708b-416c-4fc6-9c50-453d54ff8f91/mini.png)](https://insight.sensiolabs.com/projects/eac3708b-416c-4fc6-9c50-453d54ff8f91)
 
 
 This service will help you use OpenExchangeRates in your project
