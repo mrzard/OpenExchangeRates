@@ -1,7 +1,7 @@
 <?php
 
 /**
- * OpenExchangeRates Bundle for Symfony2
+ * OpenExchangeRates Service
  *
  * @author Gonzalo Míguez (mrzard@gmail.com)
  * @since 2014
@@ -79,7 +79,12 @@ class OpenExchangeRatesService
      */
     public function getEndPoint()
     {
-        return ($this->useHttps() ? 'https' : 'http').$this->endPoint;
+        $protocol = 'http';
+        if ($this->useHttps()) {
+            $protocol .= 's';
+        }
+
+        return $protocol.$this->endPoint;
     }
 
     /**
@@ -158,6 +163,36 @@ class OpenExchangeRatesService
     }
 
     /**
+     * If base currency is overriden, return $baseCurrency, otherwise
+     * return the object's base currency
+     *
+     * @param $baseCurrency
+     *
+     * @return string
+     */
+    protected function prepareBaseCurrency($baseCurrency)
+    {
+        return is_null($baseCurrency) ? $this->getBaseCurrency() : $baseCurrency;
+    }
+
+    /**
+     * Given a query and symbols, puts them in the query or not
+     *
+     * @param $query
+     * @param $symbols
+     *
+     * @return mixed
+     */
+    protected function prepareSymbols($query, $symbols)
+    {
+        if (count($symbols)) {
+            $query['symbols'] = implode(',', $symbols);
+        }
+
+        return $query;
+    }
+
+    /**
      * Get the latest exchange rates
      *
      * @param array  $symbols array of currency codes to get the rates for.
@@ -170,19 +205,15 @@ class OpenExchangeRatesService
     {
         $query = array(
             'app_id' => $this->getAppId(),
-            'base' => is_null($base) ? $this->getBaseCurrency() : $base
+            'base' => $this->prepareBaseCurrency($base)
         );
-
-        if (count($symbols)) {
-            $query['symbols'] = implode(',', $symbols);
-        }
 
         $request = $this->client->createRequest(
             'GET',
             $this->getEndPoint().'/latest.json',
             null,
             null,
-            array('query' => $query)
+            array('query' => $this->prepareSymbols($query, $symbols))
         );
 
         return $this->runRequest($request);
