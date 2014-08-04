@@ -32,12 +32,12 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
     {
         $fakeRequest = $this
             ->getMockBuilder('Guzzle\Http\Message\Request')
-            ->setConstructorArgs([
+            ->setConstructorArgs(array(
                 'GET',
                 'localhost',
-                []
-            ])
-            ->setMethods(['send', 'getResponse'])
+                array()
+            ))
+            ->setMethods(array('send', 'getResponse'))
             ->getMock();
 
         $fakeRequest->expects($this->any())->method('send')->willReturn(true);
@@ -46,12 +46,12 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
         $fakeRequest
             ->expects($this->any())
             ->method('getResponse')
-            ->willReturn(new Response(200, null, json_encode(['ok' => true])));
+            ->willReturn(new Response(200, null, json_encode(array('ok' => true))));
 
         //create our fake client
         $fakeClient = $this
             ->getMockBuilder('Guzzle\Http\Client')
-            ->setMethods(['createRequest'])
+            ->setMethods(array('createRequest'))
             ->getMock();
 
         //our client will always return a our request
@@ -76,27 +76,34 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testService()
     {
+        $latest = $this->mockedService->getLatest(array(), null);
         $this->assertTrue(
-            $this->mockedService->getLatest([], null)['ok'], 'getLatest failed'
+            $latest['ok'], 'getLatest failed'
         );
+        $latest = $this->mockedService->getLatest(array('EUR'), null);
         $this->assertTrue(
-            $this->mockedService->getLatest(['EUR'], null)['ok'], 'getLatest failed'
+            $latest['ok'], 'getLatest failed'
         );
+        $latest = $this->mockedService->getLatest(array('EUR'), 'USD');
         $this->assertTrue(
-            $this->mockedService->getLatest(['EUR'], 'USD')['ok'], 'getLatest failed'
+            $latest['ok'], 'getLatest failed'
         );
+        $latest = $this->mockedService->getLatest(array(), 'USD');
         $this->assertTrue(
-            $this->mockedService->getLatest([], 'USD')['ok'], 'getLatest failed'
+            $latest['ok'], 'getLatest failed'
         );
+        $currencies = $this->mockedService->getCurrencies();
         $this->assertTrue(
-            $this->mockedService->getCurrencies()['ok'], 'getCurrencies failed'
+            $currencies['ok'], 'getCurrencies failed'
         );
+        $convertCurrency = $this->mockedService->convertCurrency(10, 'EUR', 'USD');
         $this->assertTrue(
-            $this->mockedService->convertCurrency(10, 'EUR', 'USD')['ok'],
+            $convertCurrency['ok'],
             'convertCurrency failed'
         );
+        $getHistorical =$this->mockedService->getHistorical(new \DateTime('2014-01-01'));
         $this->assertTrue(
-            $this->mockedService->getHistorical(new \DateTime('2014-01-01'))['ok'],
+            $getHistorical['ok'],
             'getHistorical failed'
         );
     }
@@ -122,12 +129,12 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
         $appId = 'f4k31d';
         $fakeRequest = $this
             ->getMockBuilder('Guzzle\Http\Message\Request')
-            ->setConstructorArgs([
+            ->setConstructorArgs(array(
                 'GET',
                 'localhost',
-                []
-            ])
-            ->setMethods(['send', 'getResponse'])
+                array()
+            ))
+            ->setMethods(array('send', 'getResponse'))
             ->getMock();
 
         //make send throw an exception
@@ -139,12 +146,12 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
         $fakeRequest
             ->expects($this->any())
             ->method('getResponse')
-            ->willReturn(new Response(200, null, json_encode(['ok' => true])));
+            ->willReturn(new Response(200, null, json_encode(array('ok' => true))));
 
         //create our fake client
         $fakeClient = $this
             ->getMockBuilder('Guzzle\Http\Client')
-            ->setMethods(['createRequest'])
+            ->setMethods(array('createRequest'))
             ->getMock();
 
         //our client will always return a our request
@@ -159,7 +166,7 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
             ->getMockBuilder(
                 'Mrzard\OpenExchangeRates\Service\OpenExchangeRatesService'
             )
-            ->setConstructorArgs([$appId, $this->getServiceConfig(), $fakeClient])
+            ->setConstructorArgs(array($appId, $this->getServiceConfig(), $fakeClient))
             ->setMethods(null)
             ->getMock();
 
