@@ -49,7 +49,7 @@ If you're using a free version, you won't need to change the `https` or
     public function getLatest($symbols = array, $base = null)
     {
     }
-    
+
 ```
 
 Only use the `$symbols` and `$base` parameters if you have an Enterprise or
