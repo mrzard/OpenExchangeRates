@@ -16,7 +16,7 @@ the basic data neede for accessing the OpenExchangeRates API
 
 ``` php
 
-    use Mrzard\OpenExchangeRates\Service\OpenExchangeRatesService.php
+    use Mrzard\OpenExchangeRates\Service\OpenExchangeRatesService
     use Guzzle\Http\Client;
     ...
 
