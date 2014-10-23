@@ -10,20 +10,11 @@ This service will help you use OpenExchangeRates in your project
 
 ## Installation
 
-``` yml
-"require": {
-    "php": ">=5.3.0",
-    "mrzard/open-exchange-rates-service": "dev-master"
-}
-```
-
-Then use composer to install the bundle:
+Use composer to require and install the service
 
 ``` bash
-$ curl -sS https://getcomposer.org/installer | php
-$ php composer.phar update mrzard/open-exchange-rates-service
+$ php composer.phar require mrzard/open-exchange-rates-service ~0.0.1 
 ```
-
 
 ## Configuration
 
