@@ -13,7 +13,7 @@ This service will help you use OpenExchangeRates in your project
 Use composer to require and install the service
 
 ``` bash
-$ php composer.phar require mrzard/open-exchange-rates-service ~0.0.1 
+$ php composer.phar require mrzard/open-exchange-rates-service ~0.1.0
 ```
 
 ## Configuration
@@ -24,7 +24,7 @@ the basic data neede for accessing the OpenExchangeRates API
 ``` php
 
     use Mrzard\OpenExchangeRates\Service\OpenExchangeRatesService;
-    use Guzzle\Http\Client;
+    use GuzzleHttp\Client;
     ...
 
     $apiOptions = array(
