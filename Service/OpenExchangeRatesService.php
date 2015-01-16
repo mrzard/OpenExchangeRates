@@ -11,8 +11,8 @@ namespace Mrzard\OpenExchangeRates\Service;
 
 use DateTime;
 use Exception;
-use Guzzle\Http\Client;
-use Guzzle\Http\Message\RequestInterface;
+use GuzzleHttp\Client;
+use GuzzleHttp\Message\RequestInterface;
 
 /**
  * Class OpenExchangeRatesService
@@ -154,8 +154,6 @@ class OpenExchangeRatesService
         $request = $this->client->createRequest(
             'GET',
             $this->getEndPoint().'/convert/'.$value.'/'.$symbolFrom.'/'.$symbolTo,
-            null,
-            null,
             array('query' => $query)
         );
 
@@ -211,8 +209,6 @@ class OpenExchangeRatesService
         $request = $this->client->createRequest(
             'GET',
             $this->getEndPoint().'/latest.json',
-            null,
-            null,
             array('query' => $this->prepareSymbols($query, $symbols))
         );
 
@@ -228,8 +224,6 @@ class OpenExchangeRatesService
         $request = $this->client->createRequest(
             'GET',
             $this->getEndPoint().'/currencies.json',
-            null,
-            null,
             array('query' => array('app_id' => $this->getAppId()))
         );
 
@@ -247,11 +241,11 @@ class OpenExchangeRatesService
     private function runRequest(RequestInterface $request)
     {
         try {
-            $request->send();
+            $response = $this->client->send($request);
             //send the req and return the json
-            return $request->getResponse()->json();
+            return $response->json();
         } catch (Exception $e) {
-            return array('error' => $request->getResponse()->json());
+            return array('error' => '-1 Could not run request');
         }
     }
 
@@ -268,15 +262,12 @@ class OpenExchangeRatesService
         $request = $this->client->createRequest(
             'GET',
             $this->getEndPoint().'/historical/'.$date->format('Y-m-d').'.json',
-            null,
-            null,
             array(
                 array(
-                    'query' =>
-                        array(
-                            'app_id' => $this->getAppId(),
-                            'base' => $this->getBaseCurrency()
-                        )
+                    'query' => array(
+                        'app_id' => $this->getAppId(),
+                        'base' => $this->getBaseCurrency()
+                    )
                 )
             )
         );

@@ -1,8 +1,9 @@
 <?php
 namespace Mrzard\OpenExchangeRatesBundle\Tests;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\Message\Response;
+use GuzzleHttp\Client;
+use GuzzleHttp\Message\Response;
+use GuzzleHttp\Stream\Stream;
 use Mrzard\OpenExchangeRates\Service\OpenExchangeRatesService;
 
 class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
@@ -30,36 +31,28 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
-        $fakeRequest = $this
-            ->getMockBuilder('Guzzle\Http\Message\Request')
-            ->setConstructorArgs(array(
-                'GET',
-                'localhost',
-                array()
-            ))
-            ->setMethods(array('send', 'getResponse'))
+        $fakeResponse = $this
+            ->getMockBuilder('GuzzleHttp\Message\Response')
+            ->setMethods(array('json'))
+            ->setConstructorArgs(array('200'))
             ->getMock();
 
-        $fakeRequest->expects($this->any())->method('send')->willReturn(true);
-
-        //all request will return a fake response
-        $fakeRequest
+        $fakeResponse
             ->expects($this->any())
-            ->method('getResponse')
-            ->willReturn(new Response(200, null, json_encode(array('ok' => true))));
+            ->method('json')
+            ->will($this->returnValue(array('ok' => true)));
 
-        //create our fake client
         $fakeClient = $this
-            ->getMockBuilder('Guzzle\Http\Client')
-            ->setMethods(array('createRequest'))
+            ->getMockBuilder('GuzzleHttp\Client')
+            ->setMethods(array('send'))
             ->getMock();
 
         //our client will always return a our request
         $fakeClient
             ->expects($this->any())
-            ->method('createRequest')
+            ->method('send')
             ->withAnyParameters()
-            ->will($this->returnValue($fakeRequest));
+            ->will($this->returnValue($fakeResponse));
 
         $this->mockedService = $this
             ->getMockBuilder(
@@ -128,7 +121,7 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
     {
         $appId = 'f4k31d';
         $fakeRequest = $this
-            ->getMockBuilder('Guzzle\Http\Message\Request')
+            ->getMockBuilder('GuzzleHttp\Message\Request')
             ->setConstructorArgs(array(
                 'GET',
                 'localhost',
@@ -143,14 +136,20 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
         );
 
         //all request will return a fake response
+        $fakeResponse = $this
+            ->getMockBuilder('GuzzleHttp\Message\Response')
+            ->setMethods(array('json'))
+            ->setConstructorArgs(array('200', array(), Stream::factory(json_encode(array('ok' => true)))))
+            ->getMock();
+
         $fakeRequest
             ->expects($this->any())
             ->method('getResponse')
-            ->willReturn(new Response(200, null, json_encode(array('ok' => true))));
+            ->willReturn($fakeResponse);
 
         //create our fake client
         $fakeClient = $this
-            ->getMockBuilder('Guzzle\Http\Client')
+            ->getMockBuilder('GuzzleHttp\Client')
             ->setMethods(array('createRequest'))
             ->getMock();
 
