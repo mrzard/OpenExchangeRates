@@ -13,7 +13,7 @@ This service will help you use OpenExchangeRates in your project
 Use composer to require and install the service
 
 ``` bash
-$ php composer.phar require mrzard/open-exchange-rates-service ~0.1.0
+$ php composer.phar require mrzard/open-exchange-rates-service ~0.1.1
 ```
 
 ## Configuration
