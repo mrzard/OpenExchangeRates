@@ -263,11 +263,9 @@ class OpenExchangeRatesService
             'GET',
             $this->getEndPoint().'/historical/'.$date->format('Y-m-d').'.json',
             array(
-                array(
-                    'query' => array(
-                        'app_id' => $this->getAppId(),
-                        'base' => $this->getBaseCurrency()
-                    )
+                'query' => array(
+                    'app_id' => $this->getAppId(),
+                    'base' => $this->getBaseCurrency()
                 )
             )
         );
