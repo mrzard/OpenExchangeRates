@@ -47,8 +47,13 @@ If you're using a free version, you won't need to change the `https` or
 ## Note on HTTP client
 
 __compatible__ in current context means that the client MUST have methods with next signatures:
-`public HttpRequestInterface createRequest(string method, string url = null, array $options = []);
- public HttpResponseInterface send(HttpRequestInterface request);`
+
+```
+public HttpRequestInterface createRequest(string method, string url = null, array $options = []);
+
+public HttpResponseInterface send(HttpRequestInterface request);
+```
+
  Also wrapper doesn't require returned values to implement that interface, but are also MUST be compatible
 
 ## Usage
