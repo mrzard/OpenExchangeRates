@@ -11,8 +11,6 @@ namespace Mrzard\OpenExchangeRates\Service;
 
 use DateTime;
 use Exception;
-use GuzzleHttp\Client;
-use GuzzleHttp\Message\RequestInterface;
 
 /**
  * Class OpenExchangeRatesService
@@ -45,9 +43,7 @@ class OpenExchangeRatesService
     protected $baseCurrency = '';
 
     /**
-     * @var Client
-     * 
-     * Client
+     * @var HttpClientInterface
      */
     protected $client;
 
@@ -63,16 +59,36 @@ class OpenExchangeRatesService
      *
      * @param string $openExchangeRatesAppId the app_id for OpenExchangeRates
      * @param array  $apiOptions             Options for the OpenExchangeRatesApi
-     * @param Client $client                 Guzzle client for requests
+     * @param object $client                 Http client for requests
+     * @throws \ErrorException
      */
-    public function __construct($openExchangeRatesAppId, $apiOptions, Client $client)
+    public function __construct($openExchangeRatesAppId, $apiOptions, $client)
     {
         $this->appId = $openExchangeRatesAppId;
         $this->https = (bool) $apiOptions['https'];
         $this->baseCurrency = (string) $apiOptions['base_currency'];
-        $this->client = $client;
+        $this->client = $this->wrapClient($client);
     }
 
+    /**
+     * @param $client
+     * @return HttpClientInterface
+     * @throws \ErrorException
+     */
+    private function wrapClient($client)
+    {
+        if ($client instanceof HttpClientInterface) {
+            return $client;
+        }
+        if (!method_exists($client, 'createRequest')) {
+            throw new \ErrorException('Supplied client don\'t have method `createRequest(method, url, options)`');
+        }
+        if (!method_exists($client, 'send')) {
+            throw new \ErrorException('Supplied client don\'t have method `send(request)`');
+        }
+        // TODO: check methods parameters
+        return new HttpClientWrapper($client);
+    }
 
     /**
      * @return string
@@ -161,7 +177,7 @@ class OpenExchangeRatesService
     }
 
     /**
-     * If base currency is overriden, return $baseCurrency, otherwise
+     * If base currency is overridden, return $baseCurrency, otherwise
      * return the object's base currency
      *
      * @param $baseCurrency
@@ -170,7 +186,7 @@ class OpenExchangeRatesService
      */
     protected function prepareBaseCurrency($baseCurrency)
     {
-        return is_null($baseCurrency) ? $this->getBaseCurrency() : $baseCurrency;
+        return null === $baseCurrency ? $this->getBaseCurrency() : $baseCurrency;
     }
 
     /**
@@ -234,11 +250,11 @@ class OpenExchangeRatesService
     /**
      * Run guzzle request
      *
-     * @param RequestInterface $request
+     * @param HttpRequestInterface $request
      *
      * @return array
      */
-    private function runRequest(RequestInterface $request)
+    private function runRequest($request)
     {
         try {
             $response = $this->client->send($request);
