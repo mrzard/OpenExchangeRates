@@ -19,7 +19,8 @@ $ php composer.phar require mrzard/open-exchange-rates-service ~0.1.1
 ## Configuration
 
 When creating an instance of the service, you will have to provide
-the basic data neede for accessing the OpenExchangeRates API
+the basic data needed for accessing the OpenExchangeRates API and a HTTP client __compatible__ with
+`HttpClientInterface` like `GuzzleHttp\Client`
 
 ``` php
 
@@ -42,6 +43,18 @@ the basic data neede for accessing the OpenExchangeRates API
 
 If you're using a free version, you won't need to change the `https` or
 `base_currency` as they only work for Enterprise/Unlimited accounts
+
+## Note on HTTP client
+
+__compatible__ in current context means that the client MUST have methods with next signatures:
+
+```
+public HttpRequestInterface createRequest(string method, string url = null, array $options = []);
+
+public HttpResponseInterface send(HttpRequestInterface request);
+```
+
+ Also wrapper doesn't require returned values to implement that interface, but are also MUST be compatible
 
 ## Usage
 
