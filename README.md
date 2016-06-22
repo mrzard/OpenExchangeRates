@@ -13,7 +13,7 @@ This service will help you use OpenExchangeRates in your project
 Use composer to require and install the service
 
 ``` bash
-$ php composer.phar require mrzard/open-exchange-rates-service ~0.2.0
+$ php composer.phar require mrzard/open-exchange-rates-service ~1.0.0
 ```
 
 ## Configuration
@@ -49,12 +49,12 @@ If you're using a free version, you won't need to change the `https` or
 __compatible__ in current context means that the client MUST have methods with next signatures:
 
 ```
-public HttpRequestInterface createRequest(string method, string url = null, array $options = []);
+public HttpRequestInterface request(string method, string url = null, array $options = []);
 
 public HttpResponseInterface send(HttpRequestInterface request);
 ```
 
- Also wrapper doesn't require returned values to implement that interface, but are also MUST be compatible
+ Also wrapper doesn't require returned values to implement that interface, but MUST be also compatible
 
 ## Usage
 
