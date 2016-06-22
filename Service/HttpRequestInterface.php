@@ -9,5 +9,5 @@ interface HttpRequestInterface
     /**
      * @return object
      */
-    public function getRequest();
+    public function request();
 }

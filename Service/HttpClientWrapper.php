@@ -27,9 +27,9 @@ class HttpClientWrapper implements HttpClientInterface
     /**
      * @inheritdoc
      */
-    public function createRequest($method, $url = null, array $options = [])
+    public function request($method, $url = null, array $options = [])
     {
-        $request = $this->wrappedClient->createRequest($method, $url, $options);
+        $request = $this->wrappedClient->request($method, $url, $options);
         return $this->wrapRequest($request);
     }
 

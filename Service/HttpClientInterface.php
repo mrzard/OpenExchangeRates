@@ -15,7 +15,7 @@ interface HttpClientInterface
      *
      * @return HttpRequestInterface
      */
-    public function createRequest($method, $url = null, array $options = []);
+    public function request($method, $url = null, array $options = []);
 
     /**
      * Sends a single request

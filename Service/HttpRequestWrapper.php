@@ -20,7 +20,7 @@ class HttpRequestWrapper implements HttpRequestInterface
     /**
      * @return object
      */
-    public function getRequest()
+    public function request()
     {
         return $this->wrappedRequest;
     }

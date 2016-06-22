@@ -80,11 +80,11 @@ class OpenExchangeRatesService
         if ($client instanceof HttpClientInterface) {
             return $client;
         }
-        if (!method_exists($client, 'createRequest')) {
-            throw new \ErrorException('Supplied client don\'t have method `createRequest(method, url, options)`');
+        if (!method_exists($client, 'request')) {
+            throw new \ErrorException('Supplied client doesn\'t have method `request(method, url, options)`');
         }
         if (!method_exists($client, 'send')) {
-            throw new \ErrorException('Supplied client don\'t have method `send(request)`');
+            throw new \ErrorException('Supplied client doesn\'t have method `send(request)`');
         }
         // TODO: check methods parameters
         return new HttpClientWrapper($client);
@@ -167,7 +167,7 @@ class OpenExchangeRatesService
     {
         $query = array('app_id' => $this->getAppId());
 
-        $request = $this->client->createRequest(
+        $request = $this->client->request(
             'GET',
             $this->getEndPoint().'/convert/'.$value.'/'.$symbolFrom.'/'.$symbolTo,
             array('query' => $query)
@@ -222,7 +222,7 @@ class OpenExchangeRatesService
             'base' => $this->prepareBaseCurrency($base)
         );
 
-        $request = $this->client->createRequest(
+        $request = $this->client->request(
             'GET',
             $this->getEndPoint().'/latest.json',
             array('query' => $this->prepareSymbols($query, $symbols))
@@ -237,7 +237,7 @@ class OpenExchangeRatesService
      */
     public function getCurrencies()
     {
-        $request = $this->client->createRequest(
+        $request = $this->client->request(
             'GET',
             $this->getEndPoint().'/currencies.json',
             array('query' => array('app_id' => $this->getAppId()))
@@ -275,7 +275,7 @@ class OpenExchangeRatesService
      */
     public function getHistorical(DateTime $date)
     {
-        $request = $this->client->createRequest(
+        $request = $this->client->request(
             'GET',
             $this->getEndPoint().'/historical/'.$date->format('Y-m-d').'.json',
             array(

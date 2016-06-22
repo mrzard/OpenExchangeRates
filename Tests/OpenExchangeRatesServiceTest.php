@@ -151,11 +151,11 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
     {
         $fakeRequest = $this
             ->getMockBuilder('Mrzard\OpenExchangeRates\Service\HttpRequestInterface')
-            ->setMethods(array('getRequest'))
+            ->setMethods(array('request'))
             ->getMock();
         $fakeRequest
             ->expects(static::any())
-            ->method('getRequest')
+            ->method('request')
             ->will(static::returnSelf());
 
         return $fakeRequest;
@@ -188,13 +188,13 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
     {
         $fakeClient = $this
             ->getMockBuilder('Mrzard\OpenExchangeRates\Service\HttpClientInterface')
-            ->setMethods(array('createRequest', 'send'))
+            ->setMethods(array('request', 'send'))
             ->getMock();
 
         //our client will always return a our request
         $fakeClient
             ->expects(static::any())
-            ->method('createRequest')
+            ->method('request')
             ->withAnyParameters()
             ->will(static::returnValue($fakeRequest));
         $fakeClient
