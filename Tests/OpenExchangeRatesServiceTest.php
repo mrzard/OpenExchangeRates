@@ -2,6 +2,7 @@
 
 namespace Mrzard\OpenExchangeRatesBundle\Tests;
 
+use GuzzleHttp\Psr7\Response;
 use Mrzard\OpenExchangeRates\Service\OpenExchangeRatesService;
 
 class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
@@ -32,28 +33,38 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testService($appId, array $config)
     {
-        $fakeClient = $this->mockClient($this->mockRequest(), $this->mockResponse());
-
+        $fakeClient = $this->mockClient($this->mockResponse());
         $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
-
         $latest = $testingService->getLatest(array(), null);
         static::assertTrue($latest['ok'], 'getLatest failed');
 
+        $fakeClient = $this->mockClient($this->mockResponse());
+        $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
         $latest = $testingService->getLatest(array('EUR'), null);
         static::assertTrue($latest['ok'], 'getLatest failed');
 
+        $fakeClient = $this->mockClient($this->mockResponse());
+        $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
         $latest = $testingService->getLatest(array('EUR'), 'USD');
         static::assertTrue($latest['ok'], 'getLatest failed');
 
+        $fakeClient = $this->mockClient($this->mockResponse());
+        $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
         $latest = $testingService->getLatest(array(), 'USD');
         static::assertTrue($latest['ok'], 'getLatest failed');
 
+        $fakeClient = $this->mockClient($this->mockResponse());
+        $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
         $currencies = $testingService->getCurrencies();
         static::assertTrue($currencies['ok'], 'getCurrencies failed');
 
+        $fakeClient = $this->mockClient($this->mockResponse());
+        $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
         $convertCurrency = $testingService->convertCurrency(10, 'EUR', 'USD');
         static::assertTrue($convertCurrency['ok'], 'convertCurrency failed');
 
+        $fakeClient = $this->mockClient($this->mockResponse());
+        $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
         $getHistorical = $testingService->getHistorical(new \DateTime('2014-01-01'));
         static::assertTrue($getHistorical['ok'], 'getHistorical failed');
     }
@@ -66,7 +77,7 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testInstantiation($appId, array $config)
     {
-        $service = new OpenExchangeRatesService($appId, $config, $this->mockClient(null, null));
+        $service = new OpenExchangeRatesService($appId, $config, $this->mockClient(null));
         static::assertTrue($service instanceof OpenExchangeRatesService, 'Creation failed');
     }
 
@@ -78,21 +89,14 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testError($appId, array $config)
     {
-        $fakeRequest = $this->mockRequest();
-
         //all request will return a fake response
         $fakeResponse = $this->mockResponse();
 
-        $fakeRequest
-            ->expects(static::any())
-            ->method('getResponse')
-            ->willReturn($fakeResponse);
-
         //create our fake client
-        $fakeClient = $this->mockClient($fakeRequest, $fakeResponse);
+        $fakeClient = $this->mockClient($fakeResponse);
 
         //make send throw an exception
-        $fakeClient->expects(static::any())->method('send')->willThrowException(
+        $fakeClient->expects(static::any())->method('request')->willThrowException(
             new \Exception('testException')
         );
 
@@ -168,38 +172,31 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
     {
         $fakeResponse = $this
             ->getMockBuilder('Mrzard\OpenExchangeRates\Service\HttpResponseInterface')
-            ->setMethods(array('json'))
-            ->setConstructorArgs(array('200'))
+            ->setMethods(array('getResponse'))
             ->getMock();
         $fakeResponse
             ->expects(static::any())
-            ->method('json')
-            ->will(static::returnValue(array('ok' => true)));
+            ->method('getResponse')
+            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], '{"ok":true}'));
 
         return $fakeResponse;
     }
 
     /**
-     * @param $fakeRequest
      * @param $fakeResponse
      * @return \PHPUnit_Framework_MockObject_MockObject|\Mrzard\OpenExchangeRates\Service\HttpClientInterface
      */
-    private function mockClient($fakeRequest, $fakeResponse)
+    private function mockClient($fakeResponse)
     {
         $fakeClient = $this
             ->getMockBuilder('Mrzard\OpenExchangeRates\Service\HttpClientInterface')
-            ->setMethods(array('request', 'send'))
+            ->setMethods(array('request'))
             ->getMock();
 
         //our client will always return a our request
         $fakeClient
             ->expects(static::any())
             ->method('request')
-            ->withAnyParameters()
-            ->will(static::returnValue($fakeRequest));
-        $fakeClient
-            ->expects(static::any())
-            ->method('send')
             ->withAnyParameters()
             ->will(static::returnValue($fakeResponse));
 

@@ -11,6 +11,7 @@ namespace Mrzard\OpenExchangeRates\Service;
 
 use DateTime;
 use Exception;
+use GuzzleHttp\ClientInterface;
 
 /**
  * Class OpenExchangeRatesService
@@ -43,7 +44,7 @@ class OpenExchangeRatesService
     protected $baseCurrency = '';
 
     /**
-     * @var HttpClientInterface
+     * @var ClientInterface
      */
     protected $client;
 
@@ -81,10 +82,7 @@ class OpenExchangeRatesService
             return $client;
         }
         if (!method_exists($client, 'request')) {
-            throw new \ErrorException('Supplied client doesn\'t have method `request(method, url, options)`');
-        }
-        if (!method_exists($client, 'send')) {
-            throw new \ErrorException('Supplied client doesn\'t have method `send(request)`');
+            throw new \ErrorException('Supplied client doesn\'t have method `request`');
         }
         // TODO: check methods parameters
         return new HttpClientWrapper($client);
@@ -167,13 +165,11 @@ class OpenExchangeRatesService
     {
         $query = array('app_id' => $this->getAppId());
 
-        $request = $this->client->request(
+        return $this->getResponse(
             'GET',
             $this->getEndPoint().'/convert/'.$value.'/'.$symbolFrom.'/'.$symbolTo,
             array('query' => $query)
         );
-
-        return $this->runRequest($request);
     }
 
     /**
@@ -222,13 +218,11 @@ class OpenExchangeRatesService
             'base' => $this->prepareBaseCurrency($base)
         );
 
-        $request = $this->client->request(
+        return $this->getResponse(
             'GET',
             $this->getEndPoint().'/latest.json',
             array('query' => $this->prepareSymbols($query, $symbols))
         );
-
-        return $this->runRequest($request);
     }
 
 
@@ -237,30 +231,31 @@ class OpenExchangeRatesService
      */
     public function getCurrencies()
     {
-        $request = $this->client->request(
+        return $this->getResponse(
             'GET',
             $this->getEndPoint().'/currencies.json',
             array('query' => array('app_id' => $this->getAppId()))
         );
-
-        return $this->runRequest($request);
     }
 
 
     /**
-     * Run guzzle request
+     * Format response
      *
-     * @param HttpRequestInterface $request
+     * @param $method  String
+     * @param $uri     String
+     * @param $options array
      *
      * @return array
+     * @internal param HttpResponseInterface $response
+     *
      */
-    private function runRequest($request)
+    private function getResponse($method, $uri, $options)
     {
         try {
-            $response = $this->client->send($request);
-            //send the req and return the json
-            return $response->json();
-        } catch (Exception $e) {
+            $response = $this->client->request($method, $uri, $options);
+            return json_decode($response->getResponse()->getBody()->getContents(), true);
+        } catch (\Exception $e) {
             return array('error' => '-1 Could not run request');
         }
     }
@@ -275,7 +270,7 @@ class OpenExchangeRatesService
      */
     public function getHistorical(DateTime $date)
     {
-        $request = $this->client->request(
+        return $this->getResponse(
             'GET',
             $this->getEndPoint().'/historical/'.$date->format('Y-m-d').'.json',
             array(
@@ -285,7 +280,5 @@ class OpenExchangeRatesService
                 )
             )
         );
-
-        return $this->runRequest($request);
     }
 }

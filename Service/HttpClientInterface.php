@@ -7,22 +7,13 @@ namespace Mrzard\OpenExchangeRates\Service;
 interface HttpClientInterface
 {
     /**
-     * Create and return a new {@see HttpRequestInterface} object.
-     *
-     * @param string                $method  HTTP method
-     * @param string|array|object   $url     URL or URI template
-     * @param array                 $options Array of request options to apply.
-     *
-     * @return HttpRequestInterface
-     */
-    public function request($method, $url = null, array $options = []);
-
-    /**
      * Sends a single request
      *
-     * @param HttpRequestInterface $request Request to send
+     * @param $method  String Method of the request
+     * @param $uri     String Uri of the request
+     * @param $options array  Request options
      *
      * @return HttpResponseInterface
      */
-    public function send(HttpRequestInterface $request);
+    public function request($method, $uri = null, array $options = []);
 }

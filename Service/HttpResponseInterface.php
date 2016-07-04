@@ -4,11 +4,12 @@
 namespace Mrzard\OpenExchangeRates\Service;
 
 
+use Psr\Http\Message\ResponseInterface;
+
 interface HttpResponseInterface
 {
     /**
-     * Parse the JSON response body and return the JSON decoded data.
-     * @return mixed
+     * @return ResponseInterface
      */
-    public function json();
+    public function getResponse();
 }

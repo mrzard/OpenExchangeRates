@@ -28,8 +28,8 @@ class HttpResponseWrapper implements HttpResponseInterface
     /**
      * @inheritdoc
      */
-    public function json()
+    public function getBody()
     {
-        return $this->wrappedResponse->json();
+        return $this->wrappedResponse->getBody();
     }
 }

@@ -27,23 +27,21 @@ class HttpClientWrapper implements HttpClientInterface
     /**
      * @inheritdoc
      */
-    public function request($method, $url = null, array $options = [])
+    public function send($request)
     {
-        $request = $this->wrappedClient->request($method, $url, $options);
-        return $this->wrapRequest($request);
-    }
+        $request = $request instanceof HttpRequestInterface ? $request->request() : new HttpRequestWrapper($request);
 
-    private function wrapRequest($request)
-    {
-        return $request instanceof HttpRequestInterface ? $request : new HttpRequestWrapper($request);
+        return $this->wrapResponse($this->wrappedClient->send($request));
     }
 
     /**
      * @inheritdoc
      */
-    public function send(HttpRequestInterface $request)
+    public function request($method, $uri = null, array $options = [])
     {
-        return $this->wrapResponse($this->wrappedClient->send($request->getRequest()));
+        $response = $this->wrappedClient->request($method, $uri, $options);
+
+        return $this->wrapResponse($response);
     }
 
     private function wrapResponse($response)
@@ -51,8 +49,9 @@ class HttpClientWrapper implements HttpClientInterface
         if ($response instanceof HttpResponseInterface) {
             return $response;
         }
-        if (!method_exists($response, 'json')) {
-            throw new \ErrorException('Supplied client\'s response don\'t have method `json()`');
+        if (!method_exists($response, 'getBody')) {
+
+            throw new \ErrorException('Supplied client\'s response don\'t have method `getBody()`');
         }
         return new HttpResponseWrapper($response);
     }
