@@ -3,6 +3,7 @@
 namespace Mrzard\OpenExchangeRatesBundle\Tests;
 
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Stream;
 use Mrzard\OpenExchangeRates\Service\OpenExchangeRatesService;
 
 class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
@@ -172,12 +173,17 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
     {
         $fakeResponse = $this
             ->getMockBuilder('Mrzard\OpenExchangeRates\Service\HttpResponseInterface')
-            ->setMethods(array('getResponse'))
+            ->setMethods(array('getWrappedResponse', 'getBody'))
             ->getMock();
+        $responseObject =  new Response(200, ['Content-Type' => 'application/json'], '{"ok":true}');
         $fakeResponse
             ->expects(static::any())
-            ->method('getResponse')
-            ->willReturn(new Response(200, ['Content-Type' => 'application/json'], '{"ok":true}'));
+            ->method('getWrappedResponse')
+            ->willReturn($responseObject);
+        $fakeResponse
+            ->expects(static::any())
+            ->method('getBody')
+            ->willReturn($responseObject->getBody());
 
         return $fakeResponse;
     }
