@@ -253,8 +253,8 @@ class OpenExchangeRatesService
     private function getResponse($method, $uri, $options)
     {
         try {
-            $response = $this->client->request($method, $uri, $options);
-            return json_decode($response->getResponse()->getBody()->getContents(), true);
+            $response = new HttpResponseWrapper($this->client->request($method, $uri, $options));
+            return json_decode($response->getBody()->getContents(), true);
         } catch (\Exception $e) {
             return array('error' => '-1 Could not run request');
         }
