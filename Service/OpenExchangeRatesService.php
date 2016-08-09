@@ -84,8 +84,8 @@ class OpenExchangeRatesService
         if (!method_exists($client, 'request')) {
             throw new \ErrorException('Supplied client doesn\'t have method `request`');
         }
-        // TODO: check methods parameters
-        return new HttpClientWrapper($client);
+        
+	return new HttpClientWrapper($client);
     }
 
     /**
