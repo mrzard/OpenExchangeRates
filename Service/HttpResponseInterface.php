@@ -19,3 +19,4 @@ interface HttpResponseInterface
      */
     public function getWrappedResponse();
 }
+

@@ -25,3 +25,4 @@ class HttpRequestWrapper implements HttpRequestInterface
         return $this->wrappedRequest;
     }
 }
+

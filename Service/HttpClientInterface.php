@@ -17,3 +17,4 @@ interface HttpClientInterface
      */
     public function request($method, $uri = null, array $options = []);
 }
+

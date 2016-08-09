@@ -33,3 +33,4 @@ class HttpResponseWrapper implements HttpResponseInterface
         return $this->wrappedResponse->getBody();
     }
 }
+

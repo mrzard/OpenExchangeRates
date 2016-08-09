@@ -56,3 +56,4 @@ class HttpClientWrapper implements HttpClientInterface
         return new HttpResponseWrapper($response);
     }
 }
+

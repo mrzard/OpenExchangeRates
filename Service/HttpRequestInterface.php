@@ -11,3 +11,4 @@ interface HttpRequestInterface
      */
     public function request();
 }
+
