@@ -213,10 +213,10 @@ class OpenExchangeRatesService
      */
     public function getLatest(array $symbols = array(), $base = null)
     {
-        $query = array(
-            'app_id' => $this->getAppId(),
-            'base' => $this->prepareBaseCurrency($base)
-        );
+        $query = ['app_id' => $this->getAppId()];
+        if (is_string($base) && strlen($base) === 3) {
+            $query['base'] = $base;
+        }
 
         return $this->getResponse(
             'GET',
