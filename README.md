@@ -158,12 +158,18 @@ Output:
      * Get historical data
      *
      * @param \DateTime $date
+     * @param array  $symbols array of currency codes to get the rates for.
+     *                        Default empty (all currencies)
+     * @param string $base    Base currency, default NULL (gets it from config)
+     *
      */
     public function getHistorical(\DateTime $date)
     {
     }
 
 ```
+Only use the `$symbols` and `$base` parameters if you have a Developer, Enterprise or
+Unlimited plan.
 
 Output:
 
