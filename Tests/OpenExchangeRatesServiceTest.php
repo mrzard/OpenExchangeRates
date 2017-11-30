@@ -68,6 +68,16 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
         $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
         $getHistorical = $testingService->getHistorical(new \DateTime('2014-01-01'));
         static::assertTrue($getHistorical['ok'], 'getHistorical failed');
+
+        $fakeClient = $this->mockClient($this->mockResponse());
+        $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
+        $getHistorical = $testingService->getHistorical(new \DateTime('2014-01-01'), array(), 'USD');
+        static::assertTrue($getHistorical['ok'], 'getHistorical failed');
+
+        $fakeClient = $this->mockClient($this->mockResponse());
+        $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
+        $getHistorical = $testingService->getHistorical(new \DateTime('2014-01-01'), array('EUR'), 'USD');
+        static::assertTrue($getHistorical['ok'], 'getHistorical failed');
     }
 
     /**
