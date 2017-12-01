@@ -3,7 +3,6 @@
 namespace Mrzard\OpenExchangeRatesBundle\Tests;
 
 use GuzzleHttp\Psr7\Response;
-use GuzzleHttp\Psr7\Stream;
 use Mrzard\OpenExchangeRates\Service\OpenExchangeRatesService;
 
 class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
