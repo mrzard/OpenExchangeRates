@@ -266,19 +266,23 @@ class OpenExchangeRatesService
      *
      * @param \DateTime $date
      *
+     * @param array  $symbols array of currency codes to get the rates for.
+     *                        Default empty (all currencies)
+     * @param string $base    Base currency, default NULL (gets it from config)
+     *
      * @return array
      */
-    public function getHistorical(DateTime $date)
+    public function getHistorical(DateTime $date, array $symbols = array(), $base = null)
     {
+        $query = ['app_id' => $this->getAppId()];
+        if (is_string($base) && strlen($base) === 3) {
+            $query['base'] = $base;
+        }
+
         return $this->getResponse(
             'GET',
             $this->getEndPoint().'/historical/'.$date->format('Y-m-d').'.json',
-            array(
-                'query' => array(
-                    'app_id' => $this->getAppId(),
-                    'base' => $this->getBaseCurrency()
-                )
-            )
+            array('query' => $this->prepareSymbols($query, $symbols))
         );
     }
 }
