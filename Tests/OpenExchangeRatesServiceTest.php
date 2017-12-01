@@ -123,7 +123,7 @@ class OpenExchangeRatesServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testConfig($appId, array $config)
     {
-        $fakeClient = $this->mockClient($this->mockRequest(), $this->mockResponse());
+        $fakeClient = $this->mockClient($this->mockResponse());
         $testingService = new OpenExchangeRatesService($appId, $config, $fakeClient);
 
         static::assertEquals($config['https'], $testingService->useHttps(), 'https config mismatch');
